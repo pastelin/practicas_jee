@@ -11,12 +11,14 @@
 **/classes/
 **/Servers/
 **/RemoteSystemsTempFiles/
+**/.idea/
 
 
 ## archivos
 **/.classpath
 **/.project
 **/nb-configuration.xml
+**/.iml
 
 
 # Package Files #
