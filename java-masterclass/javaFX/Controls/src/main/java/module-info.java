@@ -1,4 +1,4 @@
-module com.example.layout {
+module com.example.controls {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -10,6 +10,6 @@ module com.example.layout {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
-    opens com.example.layout to javafx.fxml;
-    exports com.example.layout;
+    opens com.example.controls to javafx.fxml;
+    exports com.example.controls;
 }
