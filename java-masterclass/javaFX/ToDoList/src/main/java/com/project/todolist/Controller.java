@@ -1,15 +1,32 @@
 package com.project.todolist;
 
 import com.project.todolist.datamodel.TodoItem;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextArea;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
 
     private List<TodoItem> todoItems;
+
+    @FXML
+    private ListView<TodoItem> todoListView;
+
+    @FXML
+    private TextArea itemDetailsTextArea;
+
+    @FXML
+    private Label deadlineLabel;
 
     public void initialize() {
         TodoItem item1 = new TodoItem("Mail birthday card", "Buy a 30th birthday card for Jhon", LocalDate.of(2016, Month.APRIL, 25));
@@ -24,6 +41,34 @@ public class Controller {
         todoItems.add(item3);
         todoItems.add(item4);
         todoItems.add(item5);
+
+        // Agrega evento que se ejecutara cada que se de clic a un elemento de ListView
+        todoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
+            @Override
+            public void changed(ObservableValue<? extends TodoItem> observableValue, TodoItem todoItem, TodoItem newValue) {
+                if(newValue != null) {
+                    TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+                    // Asigna el detalle al elemento TextArea
+                    itemDetailsTextArea.setText(item.getDetails());
+                    DateTimeFormatter df = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+                    // Asigna la fecha limite al elemento Label
+                    deadlineLabel.setText(df.format(item.getDeadline()));
+                }
+            }
+        });
+
+        todoListView.getItems().setAll(todoItems);
+        todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        // Selecciona el primer elemento al cargar por primera vez
+        todoListView.getSelectionModel().selectFirst();
+    }
+
+    @FXML
+    public void handleClickListView() {
+        TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+        itemDetailsTextArea.setText(item.getDetails());
+        deadlineLabel.setText(item.getDeadline().toString());
     }
 
 }
