@@ -11,12 +11,14 @@
 **/classes/
 **/Servers/
 **/RemoteSystemsTempFiles/
+**/.idea/
 
 
 ## archivos
 **/.classpath
 **/.project
 **/nb-configuration.xml
+**/.iml
 
 
 # Package Files #
@@ -30,3 +32,4 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/Practicas/Hacker/PrcticasHacker_v1/nbproject/private/
