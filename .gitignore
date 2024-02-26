@@ -1,5 +1,6 @@
 ## folders
 **/bin/
+**/.vscode
 
 ## folders
 **/.metadata/
@@ -12,6 +13,7 @@
 **/Servers/
 **/RemoteSystemsTempFiles/
 **/.idea/
+**/out/**
 
 
 ## archivos
@@ -19,7 +21,7 @@
 **/.project
 **/nb-configuration.xml
 **/.iml
-
+**/**.class
 
 # Package Files #
 *.jar
