@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.naming.Binding;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.juan.backend.userapp.backenduserapp.models.dto.UserDto;
 import com.juan.backend.userapp.backenduserapp.models.entities.User;
+import com.juan.backend.userapp.backenduserapp.models.request.UserRequest;
 import com.juan.backend.userapp.backenduserapp.services.UserService;
 
 import jakarta.validation.Valid;
@@ -36,13 +36,13 @@ public class UserController {
 	private UserService service;
 
 	@GetMapping
-	public List<User> list() {
+	public List<UserDto> list() {
 		return service.findAll();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
-		Optional<User> userOptional = service.findById(id);
+		Optional<UserDto> userOptional = service.findById(id);
 
 		if (userOptional.isPresent()) {
 			return ResponseEntity.ok(userOptional.orElseThrow());
@@ -72,8 +72,13 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@Valid @RequestBody User user, BindingResult result, @PathVariable Long id) {
-		Optional<User> userOptional = service.update(user, id);
+	public ResponseEntity<?> update(@Valid @RequestBody UserRequest user, BindingResult result, @PathVariable Long id) {
+
+		if (result.hasErrors()) {
+			return validation(result);
+		}
+
+		Optional<UserDto> userOptional = service.update(user, id);
 
 		if (userOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
@@ -84,7 +89,7 @@ public class UserController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
-		Optional<User> userOptional = service.findById(id);
+		Optional<UserDto> userOptional = service.findById(id);
 
 		if (userOptional.isPresent()) {
 			service.remove(id);
