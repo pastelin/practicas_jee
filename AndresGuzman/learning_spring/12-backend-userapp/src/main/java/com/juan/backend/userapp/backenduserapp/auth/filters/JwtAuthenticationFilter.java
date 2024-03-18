@@ -69,6 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		ClaimsBuilder claims = Jwts.claims();
 		claims.add("authorities", new ObjectMapper().writeValueAsString(roles));
 		claims.add("isAdmin", isAdmin);
+		claims.add("username", username);
 
 		String token = Jwts.builder()
 				.claims(claims.build())
@@ -83,7 +84,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		Map<String, Object> body = new HashMap<>();
 		body.put("token", token);
 		body.put("message", String.format("Hola %s, has iniciado sesión con éxito", username));
-		body.put("user", username);
+		body.put("username", username);
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
 		response.setStatus(200);
 		response.setContentType("application/json");

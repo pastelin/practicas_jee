@@ -1,10 +1,12 @@
 package com.juan.backend.userapp.backenduserapp.models.request;
 
+import com.juan.backend.userapp.backenduserapp.models.IUser;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-public class UserRequest {
+public class UserRequest implements IUser {
 	@NotEmpty
 	@Size(min = 4, max = 8)
 	private String username;
@@ -12,6 +14,8 @@ public class UserRequest {
 	@NotEmpty
 	@Email
 	private String email;
+
+	private boolean admin;
 
 	public String getUsername() {
 		return username;
@@ -27,6 +31,15 @@ public class UserRequest {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 }

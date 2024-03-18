@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.juan.backend.userapp.backenduserapp.models.IUser;
 import com.juan.backend.userapp.backenduserapp.models.dto.UserDto;
 import com.juan.backend.userapp.backenduserapp.models.dto.mapper.DtoMapperUser;
 import com.juan.backend.userapp.backenduserapp.models.entities.Role;
@@ -50,17 +51,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserDto save(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-		Optional<Role> o = roleRepository.findByName("ROLE_USER");
-
-		List<Role> roles = new ArrayList<>();
-
-		if (o.isPresent()) {
-			roles.add(o.orElseThrow());
-		}
-
-		user.setRoles(roles);
-
+		user.setRoles(getRoles(user));
 		return DtoMapperUser.builder().setUser(userRepository.save(user)).build();
 	}
 
@@ -78,13 +69,32 @@ public class UserServiceImpl implements UserService {
 
 		if (o.isPresent()) {
 			User userDb = o.orElseThrow();
+			userDb.setRoles(getRoles(user));
 			userDb.setUsername(user.getUsername());
 			userDb.setEmail(user.getEmail());
-
 			userOptional = userRepository.save(userDb);
 		}
 
 		return Optional.ofNullable(DtoMapperUser.builder().setUser(userOptional).build());
+	}
+
+	private List<Role> getRoles(IUser user) {
+		Optional<Role> ou = roleRepository.findByName("ROLE_USER");
+
+		List<Role> roles = new ArrayList<>();
+
+		if (ou.isPresent()) {
+			roles.add(ou.orElseThrow());
+		}
+
+		if (user.isAdmin()) {
+			Optional<Role> oa = roleRepository.findByName("ROLE_ADMIN");
+			if (oa.isPresent()) {
+				roles.add(oa.orElseThrow());
+			}
+		}
+
+		return roles;
 	}
 
 }
